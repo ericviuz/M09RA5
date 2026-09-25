@@ -12,14 +12,18 @@ public class RotX {
         int index = 0;
         for (int i = 0; i<msgs.length;i++) {
             msgXifrats[i] = xifraRotX(msgs[i], index);
-            System.out.printf("%-23s => %s%n",msgs[i],xifraRotX(msgs[i],index));
+            System.out.printf("(%d)-%-23s => %s%n", index, msgs[i], xifraRotX(msgs[i], index));
             index+=2;
         }
         System.out.println("\nDesxifrat\n---------");
 
+        index =0;
         for(String msg:msgXifrats) {
-            System.out.printf("%-23s => %s%n",msg,desxifraRotX(msg,index));
+            System.out.printf("(%d)-%-23s => %s%n", index, msg, xifraRotX(msg, index));
+            index +=2;
         }
+
+        forcaBrutaRox(msgXifrats[3]);
 
     }
 
@@ -74,6 +78,14 @@ public class RotX {
             }
         }
         return resultat;
+
+    }
+
+    public void forcaBrutaRox(String s){
+        System.out.println("\nMissatge xifrat: " + s + "\n------------------");
+        for (int i = 0; i < lletres.length(); i++) {
+            System.out.printf("(%d)->%s%n", i, desxifraRotX(s, i));
+        }
 
     }
 
