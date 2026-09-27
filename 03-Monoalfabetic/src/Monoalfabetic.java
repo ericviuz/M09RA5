@@ -7,9 +7,8 @@ public class Monoalfabetic {
     private  char[] alfabet = lletres.toUpperCase().toCharArray();
     private  char[] alfabetPermutat = permutaAlfabet(alfabet);
     public  void main(String[] args) {
-        String msgs[] = {"àrbitre, coixí, Perímetre", "Taüll, DÍA, año", "Peça, Òrrius, Bòvila"};
+        String msgs[] = {"Test 01 àrbitre, coixí, Perímetre", "Test 02 Taüll, DÍA, año", "Test 03 Peça, Òrrius, Bòvila"};
         String msgsXifrats[] = new String[msgs.length];
-
         for (int i = 0; i < alfabet.length; i++) {
             System.out.print(alfabet[i]+" ");
         }
@@ -19,64 +18,67 @@ public class Monoalfabetic {
         for (int i = 0; i < alfabet.length; i++) {
             System.out.print(alfabetPermutat[i]+" ");
         }
-        System.out.println("Xifratge: ");
-
-
-
-
-
-
+        System.out.println("\nXifratge: ");
+        for (int i = 0; i < msgs.length; i++) {
+            msgsXifrats[i] = xifraMonoAlfa(msgs[i]);
+            System.out.printf("%-35s -> %s%n",msgs[i],xifraMonoAlfa(msgs[i]));
+        }
 
         System.out.println("Desxifratge: ");
-
+        for (String msg : msgsXifrats) {
+            System.out.printf("%-35s -> %s%n",msg,desxifraMonoAlfa(msg));
+        }
     }
 
-        //àrbitre, coixí, Perímetre
-    public String xifraMonoAlfa(String s){
+    //AoHola
+    public String manipulaMonoAlfa(String s, char[] origen, char[] desti){
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (Character.isLowerCase(c)) {
-                for (int j = 0; j < alfabet.length; j++) {
-                    if (c == alfabet[j]) {
-                        result.append(Character.toLowerCase(alfabetPermutat[j]));
+                for (int j = 0; j < origen.length; j++) {
+                    if (Character.toUpperCase(c) == origen[j]) {
+                        result.append(Character.toLowerCase(desti[j]));
                     }
                 }
-            } else{
-                for (int j = 0; j < alfabet.length; j++) {
-                    if (c == alfabet[j]) {
-                        result.append(Character.toLowerCase(alfabetPermutat[j]));
-                    } else {
-                        result.append(c);
+            } else if (Character.isUpperCase(c))  {
+                for (int j = 0; j < origen.length; j++) {
+                    if (c == origen[j]) {
+                        result.append(Character.toUpperCase(desti[j]));
                     }
                 }
+            } else {
+                result.append(c);
             }
         }
 
+        String str = result.toString();
+        return str;
 
     }
 
+    public String xifraMonoAlfa(String s){
+        return manipulaMonoAlfa(s, alfabet, alfabetPermutat);
+    }
 
     public String desxifraMonoAlfa(String s) {
-
-
-
+        return manipulaMonoAlfa(s, alfabetPermutat, alfabet);
     }
 
 
-    public static char[] permutaAlfabet(char[] arr){
+    public char[] permutaAlfabet(char[] arr){
         List<Character> permutat = new ArrayList<>();
         for (char c: arr) {
-            permutat.add(c)
+            permutat.add(c);
         }
 
         Collections.shuffle(permutat);
-
+        char[] resultat = new char[arr.length];
         for (int i = 0; i < permutat.size(); i++) {
-            arr[i] = permutat.get(i);
+            resultat[i] = permutat.get(i);
         } 
     
-        return arr;
+        return resultat;
     
     }
 }
