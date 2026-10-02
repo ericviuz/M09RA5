@@ -1,39 +1,55 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
-public class Monoalfabetic {
+public class Polialfabetic {
     private String lletres = "aáàbcçdeéèfghiíìïjklmnñoóòpqrstuúùüvwxyz";
     private  char[] alfabet = lletres.toUpperCase().toCharArray();
-    private  char[] alfabetPermutat = permutaAlfabet(alfabet);
-    public  void main(String[] args) {
+        private Random random;
+    private  char[] alfabetPermutat;
+    private long clauSecreta = 1234;
+    public void main(String[] args) {
         String msgs[] = {"Test 01 àrbitre, coixí, Perímetre", "Test 02 Taüll, DÍA, año", "Test 03 Peça, Òrrius, Bòvila"};
         String msgsXifrats[] = new String[msgs.length];
-        for (int i = 0; i < alfabet.length; i++) {
-            System.out.print(alfabet[i]+" ");
-        }
-        
-        System.out.println();
 
-        for (int i = 0; i < alfabet.length; i++) {
-            System.out.print(alfabetPermutat[i]+" ");
-        }
-        System.out.println("\nXifratge: ");
+        System.out.println("Xifratge:\n----------");
         for (int i = 0; i < msgs.length; i++) {
-            msgsXifrats[i] = xifraMonoAlfa(msgs[i]);
-            System.out.printf("%-35s -> %s%n",msgs[i],xifraMonoAlfa(msgs[i]));
+            initRandom(clauSecreta);
+            msgsXifrats[i] = xifraPoliAlfa(msgs[i]);
+            System.out.printf("%-34s -> %s%n", msgs[i], msgsXifrats[i]);
         }
 
-        System.out.println("Desxifratge: ");
-        for (String msg : msgsXifrats) {
-            System.out.printf("%-35s -> %s%n",msg,desxifraMonoAlfa(msg));
+        System.out.println("Desxifratge:\n------------");
+        for (int i = 0; i < msgs.length; i++) {
+            initRandom(clauSecreta);
+            String msg = desxifraPoliAlfa(msgsXifrats[i]);
+            System.out.printf("%-34s -> %s%n", msgsXifrats[i], msg);
         }
     }
 
+    public void initRandom(long clauSecreta) {
+        random = new Random(clauSecreta);
+    }
+
     //AoHola
-    public String manipulaMonoAlfa(String s, char[] origen, char[] desti){
-        StringBuffer result = new StringBuffer();
+    public String manipulaPoliAlfa(String s, boolean xifrar){
+        char[] origen = new char[alfabet.length];
+        char[] desti = new char[alfabet.length];
+
+
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < s.length(); i++) {
+            permutaAlfabet(alfabet);
+
+            if (xifrar) {
+                origen = alfabet;
+                desti = alfabetPermutat;
+            } else {
+                origen = alfabetPermutat;
+                desti = alfabet;
+            }
+                
             char c = s.charAt(i);
             if (Character.isLowerCase(c)) {
                 for (int j = 0; j < origen.length; j++) {
@@ -57,28 +73,26 @@ public class Monoalfabetic {
 
     }
 
-    public String xifraMonoAlfa(String s){
-        return manipulaMonoAlfa(s, alfabet, alfabetPermutat);
+    public String xifraPoliAlfa(String s){
+        return manipulaPoliAlfa(s, true);
     }
 
-    public String desxifraMonoAlfa(String s) {
-        return manipulaMonoAlfa(s, alfabetPermutat, alfabet);
+    public String desxifraPoliAlfa(String s) {
+        return manipulaPoliAlfa(s, false);
     }
 
 
-    public char[] permutaAlfabet(char[] arr){
+    public void permutaAlfabet(char[] arr){
         List<Character> permutat = new ArrayList<>();
         for (char c: arr) {
             permutat.add(c);
         }
 
-        Collections.shuffle(permutat);
+        Collections.shuffle(permutat,random);
         char[] resultat = new char[arr.length];
         for (int i = 0; i < permutat.size(); i++) {
             resultat[i] = permutat.get(i);
         } 
-    
-        return resultat;
-    
+        alfabetPermutat = resultat;
     }
 }
